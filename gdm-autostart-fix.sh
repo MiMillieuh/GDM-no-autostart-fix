@@ -10,7 +10,24 @@ else
 	exit 1
 fi
 
-dnf install gdm
+GDMSERVICEFILE=/usr/lib/systemd/system/gdm.service
+if [ -f "$GDMSERVICEFILE" ]; then
+    echo "GDM is installed processing..."
+else 
+    echo "GDM is not installed or you aren't using systemd. Please install GDM and use systemd as your init then try again."
+    echo "If you belive GDM is installed and you're using systemd type 1 if not type 0"
+read installed
+
+if [ $installed = "1" ]
+then
+	echo "Forced by user"
+else
+	    exit 1
+fi
+
+fi
+
+
 rm -rf /etc/systemd/system/enablegdmfix.service
 systemctl disable gdm.service
 touch /etc/systemd/system/enablegdmfix.service
